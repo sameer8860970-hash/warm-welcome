@@ -1,15 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { Spreadsheet } from '@/components/Spreadsheet';
+import { Spreadsheet, CellData } from '@/components/Spreadsheet';
 import { AgentPanel } from '@/components/AgentPanel';
 import { Toolbar } from '@/components/Toolbar';
 import { SettingsDialog } from '@/components/SettingsDialog';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
-
-interface CellData {
-  value: string;
-  formula?: string;
-}
 
 const createEmptyData = (): CellData[][] => {
   return Array.from({ length: 50 }, () => 
