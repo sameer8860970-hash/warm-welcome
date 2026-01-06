@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Upload, 
   Download, 
-  Plus, 
   Trash2, 
   FileSpreadsheet,
-  Undo,
-  Redo
+  Sun,
+  Moon
 } from 'lucide-react';
 
 interface ToolbarProps {
@@ -23,6 +22,21 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onClear,
   fileName,
 }) => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -69,9 +83,18 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       
       <div className="flex-1" />
       
-      <div className="text-xs text-muted-foreground">
+      <div className="text-xs text-muted-foreground mr-2">
         Connect your local LLM for AI features
       </div>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setIsDark(!isDark)}
+        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      </Button>
     </div>
   );
 };
