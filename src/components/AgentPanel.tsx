@@ -16,7 +16,10 @@ import {
   Sparkles,
   Wrench,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Calculator,
+  Trash2,
+  Copy
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -360,7 +363,41 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
       </ScrollArea>
 
       {/* Input */}
-      <div className="p-3 border-t border-border">
+      <div className="p-3 border-t border-border space-y-2">
+        {/* Quick Actions */}
+        <div className="flex flex-wrap gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs gap-1"
+            onClick={() => setInput('Sum all values in column A')}
+            disabled={isLoading}
+          >
+            <Calculator className="w-3 h-3" />
+            Sum column A
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs gap-1"
+            onClick={() => setInput('Find and highlight duplicate values in the spreadsheet')}
+            disabled={isLoading}
+          >
+            <Copy className="w-3 h-3" />
+            Find duplicates
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs gap-1"
+            onClick={() => setInput('Clean all empty rows from the spreadsheet')}
+            disabled={isLoading}
+          >
+            <Trash2 className="w-3 h-3" />
+            Clean empty rows
+          </Button>
+        </div>
+        
         <div className="flex gap-2">
           <Input
             value={input}
@@ -378,7 +415,7 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
             )}
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           {getDataSummary()}
         </p>
       </div>
