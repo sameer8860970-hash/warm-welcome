@@ -49,6 +49,7 @@ interface Message {
   timestamp: Date;
   thinking?: boolean;
   steps?: ThinkingStep[];
+  isStreaming?: boolean;
 }
 
 interface Conversation {
@@ -385,9 +386,33 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
         }
       }
 
+      // Stream the response word by word
       setMessages(prev => prev.map(msg => 
         msg.id === thinkingId 
-          ? { ...msg, content: responseContent, thinking: false }
+          ? { ...msg, content: '', thinking: false, isStreaming: true }
+          : msg
+      ));
+
+      const words = responseContent.split(/(\s+)/);
+      let currentContent = '';
+      
+      for (let i = 0; i < words.length; i++) {
+        currentContent += words[i];
+        const contentToSet = currentContent;
+        setMessages(prev => prev.map(msg => 
+          msg.id === thinkingId 
+            ? { ...msg, content: contentToSet }
+            : msg
+        ));
+        // Variable delay for more natural feel
+        const delay = words[i].trim() ? (15 + Math.random() * 25) : 5;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+
+      // Mark streaming as complete
+      setMessages(prev => prev.map(msg => 
+        msg.id === thinkingId 
+          ? { ...msg, isStreaming: false }
           : msg
       ));
 
@@ -506,7 +531,12 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
                         {message.steps && message.steps.length > 0 && (
                           <StepsDisplay steps={message.steps} />
                         )}
-                        <p className="whitespace-pre-wrap">{message.content}</p>
+                        <p className="whitespace-pre-wrap">
+                          {message.content}
+                          {message.isStreaming && (
+                            <span className="inline-block w-2 h-4 ml-0.5 bg-primary animate-pulse rounded-sm" />
+                          )}
+                        </p>
                       </div>
                     )}
                   </Card>
