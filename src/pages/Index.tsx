@@ -69,8 +69,8 @@ const Index = () => {
     // Here you would parse and execute the action
   }, []);
 
-  return (
-    <div className="h-screen flex flex-col bg-background">
+   return (
+     <div className="h-screen flex flex-col bg-background gradient-mesh dark:gradient-mesh-dark overflow-hidden">
       <Toolbar
         onImport={handleImport}
         onExport={handleExport}

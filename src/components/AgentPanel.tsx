@@ -95,108 +95,111 @@ const getStepIcon = (iconType?: ThinkingStep['icon']) => {
   }
 };
 
-const ThinkingIndicator = () => (
-  <div className="flex items-center gap-3 text-sm">
-    <div className="relative">
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
-        <Brain className="w-4 h-4 text-primary animate-pulse" />
-      </div>
-      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-primary rounded-full animate-ping" />
-    </div>
-    <div className="flex flex-col">
-      <span className="font-medium text-foreground">Processing...</span>
-      <span className="text-xs text-muted-foreground">Agent is thinking</span>
-    </div>
-  </div>
-);
+ const ThinkingIndicator = () => (
+   <div className="flex items-center gap-3 text-sm">
+     <div className="relative">
+       <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-swift-blue/30 via-swift-purple/20 to-swift-teal/30 flex items-center justify-center ring-1 ring-white/20 shadow-lg animate-pulse">
+         <Brain className="w-5 h-5 text-swift-blue" />
+       </div>
+       <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gradient-to-br from-swift-blue to-swift-cyan rounded-full animate-ping" />
+     </div>
+     <div className="flex flex-col">
+       <span className="font-semibold text-foreground bg-gradient-to-r from-swift-blue to-swift-purple bg-clip-text text-transparent">Processing...</span>
+       <span className="text-xs text-muted-foreground">Agent is thinking</span>
+     </div>
+   </div>
+ );
 
-const StepsDisplay = ({ steps, isThinking }: { steps: ThinkingStep[]; isThinking?: boolean }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const completedSteps = steps.filter(s => s.status === 'completed').length;
-  const progress = (completedSteps / steps.length) * 100;
-  
-  return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
-      <CollapsibleTrigger className="flex items-center justify-between w-full text-xs hover:bg-muted/50 rounded-md p-1.5 -ml-1.5 transition-colors">
-        <div className="flex items-center gap-2">
-          {isOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-          <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span className="font-medium">Agent Reasoning</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">{completedSteps}/{steps.length}</span>
-          {isThinking && <Loader2 className="w-3 h-3 animate-spin text-primary" />}
-        </div>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="mt-2">
-        <div className="mb-3">
-          <Progress value={progress} className="h-1.5" />
-        </div>
-        <div className="space-y-1 relative">
-          {/* Vertical line connector */}
-          <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-border" />
-          
-          {steps.map((step, index) => (
-            <div 
-              key={step.id}
-              className={cn(
-                "flex items-start gap-3 p-2 rounded-lg transition-all relative",
-                step.status === 'in-progress' && "bg-primary/5 ring-1 ring-primary/20",
-                step.status === 'completed' && "opacity-80",
-                step.status === 'pending' && "opacity-40"
-              )}
-            >
-              {/* Step number with icon */}
-              <div className={cn(
-                "relative z-10 w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-xs font-bold",
-                step.status === 'completed' && "bg-green-500/20 text-green-600",
-                step.status === 'in-progress' && "bg-primary/20 text-primary",
-                step.status === 'pending' && "bg-muted text-muted-foreground"
-              )}>
-                {step.status === 'completed' ? (
-                  <CheckCircle2 className="w-4 h-4" />
-                ) : step.status === 'in-progress' ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  index + 1
-                )}
-              </div>
-              
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="flex items-center gap-2">
-                  <span className={cn(
-                    "w-5 h-5 rounded flex items-center justify-center",
-                    step.status === 'completed' && "text-green-600",
-                    step.status === 'in-progress' && "text-primary",
-                    step.status === 'pending' && "text-muted-foreground"
-                  )}>
-                    {getStepIcon(step.icon)}
-                  </span>
-                  <p className={cn(
-                    "font-medium text-sm",
-                    step.status === 'completed' && "text-green-600 dark:text-green-400",
-                    step.status === 'in-progress' && "text-primary"
-                  )}>
-                    {step.label}
-                  </p>
-                </div>
-                {step.detail && (
-                  <p className="text-xs text-muted-foreground mt-0.5 ml-7">{step.detail}</p>
-                )}
-                {step.duration && step.status === 'completed' && (
-                  <p className="text-xs text-muted-foreground mt-0.5 ml-7 flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {step.duration}ms
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
+ const StepsDisplay = ({ steps, isThinking }: { steps: ThinkingStep[]; isThinking?: boolean }) => {
+   const [isOpen, setIsOpen] = useState(true);
+   const completedSteps = steps.filter(s => s.status === 'completed').length;
+   const progress = (completedSteps / steps.length) * 100;
+   
+   return (
+     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+       <CollapsibleTrigger className="flex items-center justify-between w-full text-xs hover:bg-white/10 rounded-xl p-2 -ml-2 transition-all">
+         <div className="flex items-center gap-2">
+           {isOpen ? <ChevronDown className="w-4 h-4 text-swift-blue" /> : <ChevronRight className="w-4 h-4 text-swift-blue" />}
+           <Sparkles className="w-4 h-4 text-swift-purple" />
+           <span className="font-semibold bg-gradient-to-r from-swift-blue to-swift-purple bg-clip-text text-transparent">Agent Reasoning</span>
+         </div>
+         <div className="flex items-center gap-2">
+           <span className="text-muted-foreground font-medium">{completedSteps}/{steps.length}</span>
+           {isThinking && <Loader2 className="w-3.5 h-3.5 animate-spin text-swift-blue" />}
+         </div>
+       </CollapsibleTrigger>
+       <CollapsibleContent className="mt-3">
+         <div className="mb-4 h-2 rounded-full overflow-hidden glass-subtle">
+           <div 
+             className="h-full bg-gradient-to-r from-swift-blue via-swift-purple to-swift-teal transition-all duration-500 rounded-full"
+             style={{ width: `${progress}%` }}
+           />
+         </div>
+         <div className="space-y-2 relative">
+           {/* Vertical line connector */}
+           <div className="absolute left-[13px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-swift-blue/30 via-swift-purple/30 to-swift-teal/30 rounded-full" />
+           
+           {steps.map((step, index) => (
+             <div 
+               key={step.id}
+               className={cn(
+                 "flex items-start gap-3 p-3 rounded-xl transition-all relative",
+                 step.status === 'in-progress' && "glass ring-1 ring-swift-blue/30 shadow-lg animate-pulse",
+                 step.status === 'completed' && "opacity-90",
+                 step.status === 'pending' && "opacity-40"
+               )}
+             >
+               {/* Step number with icon */}
+               <div className={cn(
+                 "relative z-10 w-7 h-7 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold shadow-lg transition-all",
+                 step.status === 'completed' && "bg-gradient-to-br from-swift-green/30 to-swift-teal/30 text-swift-green ring-1 ring-swift-green/30",
+                 step.status === 'in-progress' && "bg-gradient-to-br from-swift-blue/30 to-swift-purple/30 text-swift-blue ring-1 ring-swift-blue/30",
+                 step.status === 'pending' && "bg-muted/50 text-muted-foreground"
+               )}>
+                 {step.status === 'completed' ? (
+                   <CheckCircle2 className="w-4 h-4" />
+                 ) : step.status === 'in-progress' ? (
+                   <Loader2 className="w-4 h-4 animate-spin" />
+                 ) : (
+                   index + 1
+                 )}
+               </div>
+               
+               <div className="flex-1 min-w-0 pt-0.5">
+                 <div className="flex items-center gap-2">
+                   <span className={cn(
+                     "w-5 h-5 rounded-lg flex items-center justify-center",
+                     step.status === 'completed' && "text-swift-green",
+                     step.status === 'in-progress' && "text-swift-blue",
+                     step.status === 'pending' && "text-muted-foreground"
+                   )}>
+                     {getStepIcon(step.icon)}
+                   </span>
+                   <p className={cn(
+                     "font-semibold text-sm",
+                     step.status === 'completed' && "text-swift-green",
+                     step.status === 'in-progress' && "text-swift-blue"
+                   )}>
+                     {step.label}
+                   </p>
+                 </div>
+                 {step.detail && (
+                   <p className="text-xs text-muted-foreground mt-1 ml-7">{step.detail}</p>
+                 )}
+                 {step.duration && step.status === 'completed' && (
+                   <p className="text-xs text-muted-foreground mt-1 ml-7 flex items-center gap-1.5 font-medium">
+                     <Clock className="w-3 h-3 text-swift-teal" />
+                     {step.duration}ms
+                   </p>
+                 )}
+               </div>
+             </div>
+           ))}
+         </div>
+       </CollapsibleContent>
+     </Collapsible>
+   );
+ };
 
 export const AgentPanel: React.FC<AgentPanelProps> = ({
   spreadsheetData,
@@ -451,52 +454,52 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
     return `${diffDays}d ago`;
   };
 
-  return (
-    <div className="w-96 border-l border-border flex flex-col bg-card">
-      {/* Header */}
-      <div className="p-3 border-b border-border flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-1 ring-primary/20">
-            <Bot className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-sm">Excel Agent</h3>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <span className={cn(
-                "w-1.5 h-1.5 rounded-full",
-                llmEndpoint ? "bg-green-500" : "bg-yellow-500"
-              )} />
-              {llmEndpoint ? 'Connected' : 'No LLM connected'}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" onClick={createNewConversation} title="New conversation">
-            <Plus className="w-4 h-4" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={onSettingsClick}>
-            <Settings className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
+   return (
+     <div className="w-96 border-l border-border/50 flex flex-col glass-subtle">
+       {/* Header */}
+       <div className="p-4 border-b border-border/30 flex items-center justify-between glass">
+         <div className="flex items-center gap-3">
+           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-swift-blue/20 via-swift-purple/10 to-swift-teal/20 flex items-center justify-center ring-1 ring-white/20 shadow-lg animate-float">
+             <Bot className="w-5 h-5 text-swift-blue" />
+           </div>
+           <div>
+             <h3 className="font-semibold text-sm bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">Excel Agent</h3>
+             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+               <span className={cn(
+                 "w-2 h-2 rounded-full ring-2 ring-offset-1 ring-offset-transparent animate-pulse",
+                 llmEndpoint ? "bg-swift-green ring-swift-green/30" : "bg-swift-orange ring-swift-orange/30"
+               )} />
+               {llmEndpoint ? 'Connected' : 'No LLM connected'}
+             </p>
+           </div>
+         </div>
+         <div className="flex items-center gap-1">
+           <Button variant="ghost" size="icon" onClick={createNewConversation} title="New conversation" className="rounded-xl hover:bg-white/10 hover:shadow-lg transition-all">
+             <Plus className="w-4 h-4" />
+           </Button>
+           <Button variant="ghost" size="icon" onClick={onSettingsClick} className="rounded-xl hover:bg-white/10 hover:shadow-lg transition-all">
+             <Settings className="w-4 h-4" />
+           </Button>
+         </div>
+       </div>
 
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'chat' | 'history')} className="flex-1 flex flex-col overflow-hidden">
-        <TabsList className="mx-3 mt-2 grid grid-cols-2">
-          <TabsTrigger value="chat" className="gap-1.5">
+       {/* Tabs */}
+       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'chat' | 'history')} className="flex-1 flex flex-col overflow-hidden">
+         <TabsList className="mx-3 mt-3 grid grid-cols-2 glass rounded-2xl p-1 h-11">
+           <TabsTrigger value="chat" className="gap-1.5 rounded-xl data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-lg transition-all">
             <MessageSquare className="w-3.5 h-3.5" />
             Chat
-          </TabsTrigger>
-          <TabsTrigger value="history" className="gap-1.5">
+           </TabsTrigger>
+           <TabsTrigger value="history" className="gap-1.5 rounded-xl data-[state=active]:bg-white/80 dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-lg transition-all">
             <History className="w-3.5 h-3.5" />
             History
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden m-0 data-[state=inactive]:hidden">
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-3" ref={scrollRef}>
-            <div className="space-y-4">
+         <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden m-0 data-[state=inactive]:hidden">
+           {/* Messages */}
+           <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+             <div className="space-y-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -505,22 +508,24 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
                     message.role === 'user' && "flex-row-reverse"
                   )}
                 >
-                  <div className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                    message.role === 'assistant' 
-                      ? "bg-gradient-to-br from-primary/20 to-primary/5 ring-1 ring-primary/20" 
-                      : "bg-secondary"
-                  )}>
-                    {message.role === 'assistant' ? (
-                      <Bot className="w-4 h-4 text-primary" />
-                    ) : (
-                      <User className="w-4 h-4 text-secondary-foreground" />
-                    )}
-                  </div>
-                  <Card className={cn(
-                    "p-3 max-w-[85%] text-sm",
-                    message.role === 'user' && "bg-primary text-primary-foreground"
-                  )}>
+                   <div className={cn(
+                     "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-lg",
+                     message.role === 'assistant' 
+                       ? "bg-gradient-to-br from-swift-blue/20 via-swift-purple/10 to-swift-teal/20 ring-1 ring-white/30" 
+                       : "bg-gradient-to-br from-swift-indigo/30 to-swift-purple/20 ring-1 ring-white/20"
+                   )}>
+                     {message.role === 'assistant' ? (
+                       <Bot className="w-4 h-4 text-swift-blue" />
+                     ) : (
+                       <User className="w-4 h-4 text-swift-indigo" />
+                     )}
+                   </div>
+                   <Card className={cn(
+                     "p-4 max-w-[85%] text-sm rounded-2xl border-white/20 animate-slide-up",
+                     message.role === 'user' 
+                       ? "bg-gradient-to-br from-swift-blue to-swift-indigo text-white shadow-lg shadow-swift-blue/20" 
+                       : "glass shadow-lg"
+                   )}>
                     {message.thinking ? (
                       <div className="space-y-4">
                         <ThinkingIndicator />
@@ -531,10 +536,10 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
                         {message.steps && message.steps.length > 0 && (
                           <StepsDisplay steps={message.steps} />
                         )}
-                        <p className="whitespace-pre-wrap">
+                         <p className="whitespace-pre-wrap leading-relaxed">
                           {message.content}
                           {message.isStreaming && (
-                            <span className="inline-block w-2 h-4 ml-0.5 bg-primary animate-pulse rounded-sm" />
+                             <span className="inline-block w-2 h-5 ml-0.5 bg-gradient-to-t from-swift-blue to-swift-cyan animate-pulse rounded-full" />
                           )}
                         </p>
                       </div>
@@ -545,88 +550,93 @@ Respond with helpful analysis or instructions. If you suggest code actions, wrap
             </div>
           </ScrollArea>
 
-          {/* Input */}
-          <div className="p-3 border-t border-border space-y-2">
-            {/* Quick Actions */}
-            <div className="flex flex-wrap gap-1.5">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs gap-1"
-                onClick={() => setInput('Sum all values in column A')}
-                disabled={isLoading}
-              >
-                <Calculator className="w-3 h-3" />
+           {/* Input */}
+           <div className="p-4 border-t border-border/30 space-y-3 glass">
+             {/* Quick Actions */}
+             <div className="flex flex-wrap gap-2">
+               <Button
+                 variant="outline"
+                 size="sm"
+                 className="h-8 text-xs gap-1.5 rounded-xl glass-subtle border-white/20 hover:shadow-lg hover:scale-105 transition-all"
+                 onClick={() => setInput('Sum all values in column A')}
+                 disabled={isLoading}
+               >
+                 <Calculator className="w-3.5 h-3.5 text-swift-blue" />
                 Sum column A
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs gap-1"
-                onClick={() => setInput('Find and highlight duplicate values in the spreadsheet')}
-                disabled={isLoading}
-              >
-                <Copy className="w-3 h-3" />
+               <Button
+                 variant="outline"
+                 size="sm"
+                 className="h-8 text-xs gap-1.5 rounded-xl glass-subtle border-white/20 hover:shadow-lg hover:scale-105 transition-all"
+                 onClick={() => setInput('Find and highlight duplicate values in the spreadsheet')}
+                 disabled={isLoading}
+               >
+                 <Copy className="w-3.5 h-3.5 text-swift-purple" />
                 Find duplicates
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs gap-1"
-                onClick={() => setInput('Clean all empty rows from the spreadsheet')}
-                disabled={isLoading}
-              >
-                <Trash2 className="w-3 h-3" />
+               <Button
+                 variant="outline"
+                 size="sm"
+                 className="h-8 text-xs gap-1.5 rounded-xl glass-subtle border-white/20 hover:shadow-lg hover:scale-105 transition-all"
+                 onClick={() => setInput('Clean all empty rows from the spreadsheet')}
+                 disabled={isLoading}
+               >
+                 <Trash2 className="w-3.5 h-3.5 text-swift-red" />
                 Clean empty rows
               </Button>
             </div>
             
-            <div className="flex gap-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask the agent..."
-                disabled={isLoading}
-                className="flex-1"
-              />
-              <Button onClick={sendMessage} disabled={isLoading || !input.trim()} size="icon">
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground text-center">
+             <div className="flex gap-2">
+               <Input
+                 value={input}
+                 onChange={(e) => setInput(e.target.value)}
+                 onKeyDown={handleKeyDown}
+                 placeholder="Ask the agent..."
+                 disabled={isLoading}
+                 className="flex-1 rounded-xl glass-subtle border-white/20 focus:ring-swift-blue/50 focus:border-swift-blue/50 transition-all"
+               />
+               <Button 
+                 onClick={sendMessage} 
+                 disabled={isLoading || !input.trim()} 
+                 size="icon"
+                 className="rounded-xl bg-gradient-to-br from-swift-blue to-swift-indigo hover:shadow-lg hover:shadow-swift-blue/30 hover:scale-105 transition-all"
+               >
+                 {isLoading ? (
+                   <Loader2 className="w-4 h-4 animate-spin" />
+                 ) : (
+                   <Send className="w-4 h-4" />
+                 )}
+               </Button>
+             </div>
+             <p className="text-xs text-muted-foreground text-center">
               {getDataSummary()}
             </p>
           </div>
         </TabsContent>
 
-        <TabsContent value="history" className="flex-1 overflow-hidden m-0 data-[state=inactive]:hidden">
-          <ScrollArea className="h-full">
-            <div className="p-3 space-y-2">
+         <TabsContent value="history" className="flex-1 overflow-hidden m-0 data-[state=inactive]:hidden">
+           <ScrollArea className="h-full">
+             <div className="p-4 space-y-2">
               {conversations.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                 <div className="text-center py-8 text-muted-foreground glass rounded-2xl">
+                   <History className="w-10 h-10 mx-auto mb-3 opacity-50" />
                   <p className="text-sm">No conversations yet</p>
                 </div>
               ) : (
                 conversations.map((conv) => (
-                  <button
-                    key={conv.id}
-                    onClick={() => {
-                      setActiveConversationId(conv.id);
-                      setActiveTab('chat');
-                    }}
-                    className={cn(
-                      "w-full text-left p-3 rounded-lg border transition-colors",
-                      conv.id === activeConversationId 
-                        ? "bg-primary/10 border-primary/30" 
-                        : "hover:bg-muted/50 border-transparent"
-                    )}
-                  >
+                   <button
+                     key={conv.id}
+                     onClick={() => {
+                       setActiveConversationId(conv.id);
+                       setActiveTab('chat');
+                     }}
+                     className={cn(
+                       "w-full text-left p-4 rounded-2xl border transition-all hover:scale-[1.02]",
+                       conv.id === activeConversationId 
+                         ? "glass border-swift-blue/30 shadow-lg shadow-swift-blue/10" 
+                         : "glass-subtle border-white/10 hover:border-white/30 hover:shadow-lg"
+                     )}
+                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{conv.title}</p>
