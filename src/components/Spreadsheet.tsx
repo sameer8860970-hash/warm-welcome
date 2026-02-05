@@ -143,25 +143,25 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ data, onDataChange }) 
     return cell?.formula || cell?.value || '';
   };
 
-  return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-background">
-      {/* Formula Bar */}
-      <div className="h-9 border-b border-border flex items-center px-2 gap-2 bg-card">
-        <div className="w-16 text-center text-sm font-medium text-muted-foreground bg-muted rounded px-2 py-1">
+   return (
+     <div className="flex-1 flex flex-col overflow-hidden bg-background gradient-mesh dark:gradient-mesh-dark">
+       {/* Formula Bar */}
+       <div className="h-11 border-b border-border/30 flex items-center px-3 gap-3 glass">
+         <div className="w-16 text-center text-sm font-semibold text-swift-blue bg-swift-blue/10 rounded-lg px-2 py-1.5 ring-1 ring-swift-blue/20">
           {selectedCell ? `${COLUMNS[selectedCell.col]}${selectedCell.row + 1}` : ''}
-        </div>
-        <div className="text-muted-foreground">fx</div>
-        <Input
-          value={getFormulaBarValue()}
-          onChange={(e) => {
-            if (selectedCell) {
-              handleCellChange(selectedCell.row, selectedCell.col, e.target.value);
-            }
-          }}
-          className="flex-1 h-7 text-sm"
-          placeholder="Enter value or formula (e.g., =SUM(A1:A10))"
-        />
-      </div>
+         </div>
+         <div className="text-swift-purple font-bold text-sm">fx</div>
+         <Input
+           value={getFormulaBarValue()}
+           onChange={(e) => {
+             if (selectedCell) {
+               handleCellChange(selectedCell.row, selectedCell.col, e.target.value);
+             }
+           }}
+           className="flex-1 h-8 text-sm rounded-xl glass-subtle border-white/20 focus:ring-swift-blue/50"
+           placeholder="Enter value or formula (e.g., =SUM(A1:A10))"
+         />
+       </div>
 
       {/* Format Toolbar */}
       <FormatToolbar
@@ -170,28 +170,28 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ data, onDataChange }) 
         hasSelection={!!selectedCell}
       />
 
-      {/* Spreadsheet Grid */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full border-collapse text-sm">
-          <thead className="sticky top-0 z-10">
-            <tr>
-              <th className="w-12 min-w-12 bg-muted border border-border p-1 text-center text-muted-foreground font-medium">
+       {/* Spreadsheet Grid */}
+       <div className="flex-1 overflow-auto">
+         <table className="w-full border-collapse text-sm">
+           <thead className="sticky top-0 z-10">
+             <tr>
+               <th className="w-12 min-w-12 glass border border-border/30 p-1.5 text-center text-muted-foreground font-semibold">
                 
               </th>
-              {COLUMNS.map((col) => (
-                <th
-                  key={col}
-                  className="min-w-24 bg-muted border border-border p-1 text-center text-muted-foreground font-medium"
-                >
+               {COLUMNS.map((col) => (
+                 <th
+                   key={col}
+                   className="min-w-24 glass border border-border/30 p-1.5 text-center text-muted-foreground font-semibold"
+                 >
                   {col}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: INITIAL_ROWS }, (_, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="bg-muted border border-border p-1 text-center text-muted-foreground font-medium sticky left-0 z-[5]">
+             {Array.from({ length: INITIAL_ROWS }, (_, rowIndex) => (
+               <tr key={rowIndex}>
+                 <td className="glass border border-border/30 p-1.5 text-center text-muted-foreground font-medium sticky left-0 z-[5]">
                   {rowIndex + 1}
                 </td>
                 {COLUMNS.map((_, colIndex) => {
@@ -203,10 +203,10 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ data, onDataChange }) 
                   return (
                     <td
                       key={colIndex}
-                      className={cn(
-                        "border border-border p-0 relative",
-                        isSelected && "ring-2 ring-primary ring-inset z-[1]"
-                      )}
+                       className={cn(
+                         "border border-border/30 p-0 relative bg-card/50 hover:bg-card/80 transition-colors",
+                         isSelected && "ring-2 ring-swift-blue ring-inset z-[1] bg-swift-blue/5"
+                       )}
                       style={{
                         backgroundColor: format.bgColor,
                       }}
@@ -223,7 +223,7 @@ export const Spreadsheet: React.FC<SpreadsheetProps> = ({ data, onDataChange }) 
                             handleCellChange(rowIndex, colIndex, editValue);
                             setEditingCell(null);
                           }}
-                          className="h-7 rounded-none border-0 focus-visible:ring-0 px-1"
+                           className="h-8 rounded-none border-0 focus-visible:ring-0 px-2 bg-white dark:bg-card"
                         />
                       ) : (
                         <div
