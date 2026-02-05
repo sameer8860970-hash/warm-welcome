@@ -136,6 +136,70 @@
      --sidebar-border: 220 20% 20%;
      --sidebar-ring: 211 100% 55%;
    }
+ 
+   .cream {
+     /* Warm Cream Theme */
+     --background: 40 30% 96%;
+     --foreground: 30 20% 15%;
+ 
+     --card: 40 40% 98%;
+     --card-foreground: 30 20% 15%;
+ 
+     --popover: 40 40% 98%;
+     --popover-foreground: 30 20% 15%;
+ 
+     /* Warm Brown Primary */
+     --primary: 30 60% 45%;
+     --primary-foreground: 40 40% 98%;
+ 
+     --secondary: 35 25% 92%;
+     --secondary-foreground: 30 20% 20%;
+ 
+     --muted: 35 20% 92%;
+     --muted-foreground: 30 15% 45%;
+ 
+     --accent: 30 60% 45%;
+     --accent-foreground: 40 40% 98%;
+ 
+     /* Warm Red */
+     --destructive: 0 65% 50%;
+     --destructive-foreground: 40 40% 98%;
+ 
+     --border: 35 20% 88%;
+     --input: 35 20% 88%;
+     --ring: 30 60% 45%;
+ 
+     /* Cream Swift Colors */
+     --swift-blue: 200 60% 45%;
+     --swift-green: 150 50% 40%;
+     --swift-indigo: 260 50% 50%;
+     --swift-orange: 25 90% 50%;
+     --swift-pink: 340 60% 55%;
+     --swift-purple: 270 50% 50%;
+     --swift-red: 0 65% 50%;
+     --swift-teal: 175 50% 40%;
+     --swift-yellow: 40 90% 50%;
+     --swift-mint: 160 45% 45%;
+     --swift-cyan: 185 60% 45%;
+ 
+     /* Cream Glass Effects */
+     --glass-bg: 40 40% 98% / 0.75;
+     --glass-border: 40 30% 90% / 0.6;
+     --glass-highlight: 40 50% 100% / 0.9;
+     --glass-shadow: 30 20% 20% / 0.08;
+     --glass-blur: 20px;
+     --glass-saturation: 120%;
+ 
+     /* Sidebar */
+     --sidebar-background: 40 30% 97%;
+     --sidebar-foreground: 30 15% 35%;
+     --sidebar-primary: 30 60% 45%;
+     --sidebar-primary-foreground: 40 40% 98%;
+     --sidebar-accent: 35 25% 92%;
+     --sidebar-accent-foreground: 30 20% 20%;
+     --sidebar-border: 35 20% 88%;
+     --sidebar-ring: 30 60% 45%;
+   }
  }
  
  @layer base {

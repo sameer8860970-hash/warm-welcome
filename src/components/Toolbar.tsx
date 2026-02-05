@@ -7,8 +7,10 @@
    FileSpreadsheet,
    Sun,
    Moon,
-   Sparkles
+   Sparkles,
+   Coffee
  } from 'lucide-react';
+ import { cn } from '@/lib/utils';
  
  interface ToolbarProps {
    onImport: (file: File) => void;
@@ -17,26 +19,57 @@
    fileName: string;
  }
  
+ type Theme = 'light' | 'dark' | 'cream';
+ 
  export const Toolbar: React.FC<ToolbarProps> = ({
    onImport,
    onExport,
    onClear,
    fileName,
  }) => {
-   const [isDark, setIsDark] = useState(() => {
+   const [theme, setTheme] = useState<Theme>(() => {
      if (typeof window !== 'undefined') {
-       return document.documentElement.classList.contains('dark');
+       if (document.documentElement.classList.contains('dark')) return 'dark';
+       if (document.documentElement.classList.contains('cream')) return 'cream';
      }
-     return false;
+     return 'light';
    });
  
    useEffect(() => {
-     if (isDark) {
+     document.documentElement.classList.remove('dark', 'cream');
+     if (theme === 'dark') {
        document.documentElement.classList.add('dark');
-     } else {
-       document.documentElement.classList.remove('dark');
+     } else if (theme === 'cream') {
+       document.documentElement.classList.add('cream');
      }
-   }, [isDark]);
+   }, [theme]);
+ 
+   const cycleTheme = () => {
+     setTheme(prev => {
+       if (prev === 'light') return 'cream';
+       if (prev === 'cream') return 'dark';
+       return 'light';
+     });
+   };
+ 
+   const getThemeIcon = () => {
+     switch (theme) {
+       case 'dark':
+         return <Moon className="w-5 h-5 text-swift-indigo" />;
+       case 'cream':
+         return <Coffee className="w-5 h-5 text-swift-orange" />;
+       default:
+         return <Sun className="w-5 h-5 text-swift-yellow" />;
+     }
+   };
+ 
+   const getThemeLabel = () => {
+     switch (theme) {
+       case 'dark': return 'Dark mode';
+       case 'cream': return 'Cream mode';
+       default: return 'Light mode';
+     }
+   };
  
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
      const file = e.target.files?.[0];
@@ -94,15 +127,11 @@
        <Button
          variant="ghost"
          size="icon"
-         onClick={() => setIsDark(!isDark)}
-         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+         onClick={cycleTheme}
+         title={`Current: ${getThemeLabel()}. Click to switch.`}
          className="rounded-xl hover:bg-white/10 hover:shadow-lg transition-all w-10 h-10"
        >
-         {isDark ? (
-           <Sun className="w-5 h-5 text-swift-yellow" />
-         ) : (
-           <Moon className="w-5 h-5 text-swift-indigo" />
-         )}
+         {getThemeIcon()}
        </Button>
      </div>
    );
